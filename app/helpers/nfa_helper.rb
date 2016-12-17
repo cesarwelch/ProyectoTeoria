@@ -37,6 +37,17 @@ module NfaHelper
 			resp = consume(input)
 			resp[:accept]
 		end
-		 
+
+		def transition(state, symbol)
+			dests = @transitions[state][symbol]
+			dests = [dests] unless dests.kind_of? Array
+			dests
+		end
+
+		def has_transition?(state, symbol)
+			return false unless @transitions.include? state
+			@transitions[state].has_key? symbol
+		end
+
 	end 
 end
