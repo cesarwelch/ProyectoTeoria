@@ -31,6 +31,12 @@ module NfaHelper
 			accept: accept,
 			heads: heads
 			}
-		end 
+		end
+
+		def accepts?(input)
+			resp = consume(input)
+			resp[:accept]
+		end
+		 
 	end 
 end
