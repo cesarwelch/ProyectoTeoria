@@ -46,7 +46,7 @@ module TmHelper
 			resp = feed(input)
 			resp[:accept]
 		end
-		
+
 		def rejects?(input)
 			resp = feed(input)
 			resp[:reject]
@@ -64,6 +64,41 @@ module TmHelper
 		def has_transition?(state, read)
 			return false unless @transitions.include? state
 			@transitions[state].has_key? read
+		end
+	end
+
+	class TMTape
+		attr_accessor :storage
+
+		def initialize(elements=nil)
+			if elements
+				@storage = []
+				@storage << '@' unless elements[0] == '@'
+				@storage += elements.split('')
+				@storage << '@' unless elements[-1] == '@'
+				@head = 1
+			end
+		end
+
+		def transition(read, write, move)
+			if read == @storage[@head]
+				@storage[@head] = write
+				case move
+				when 'R'
+					@storage << '@' if @storage[@head +1]
+					@head += 1
+				when 'L'
+					@storage.unshift('@') if @head == 0
+					@head -= 1
+				end
+				return true
+			else
+				return false
+			end
+		end
+
+		def output
+			@storage.join.sub(/^@*/, '').sub(/@*$/, '')
 		end
 	end
 
