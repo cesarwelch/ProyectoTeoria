@@ -41,4 +41,31 @@ module TmHelper
 			}
 			resp
 		end
+
+		def accepts?(input)
+			resp = feed(input)
+			resp[:accept]
+		end
+		
+		def rejects?(input)
+			resp = feed(input)
+			resp[:reject]
+		end
+
+		def transition(state, symbol)
+			actions = @transitions[state][symbol]
+			@tape.transition(symbol, actions['write'], actions['move'])
+
+			@accept = true if actions['to'] == 'ACCEPT'
+			@reject = true if actions['to'] == 'REJECT'
+			@head = actions['to']
+		end
+
+		def has_transition?(state, read)
+			return false unless @transitions.include? state
+			@transitions[state].has_key? read
+		end
+	end
+
+
 end
