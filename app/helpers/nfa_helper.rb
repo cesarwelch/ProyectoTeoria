@@ -3,7 +3,6 @@ module NfaHelper
 		def consume(input)
 			heads = [@start]
 
-
 			if has_transition?(@start, '&')
 			transition(@start, '&').each { |h| heads << h } 
 			end
@@ -23,6 +22,33 @@ module NfaHelper
 			heads = newHeads
 			break if heads.empty?
 			end
-		end 
+
+			accept = false
+			heads.each { |head| accept = true if accept_state? head }
+
+			resp = {
+			input: input,
+			accept: accept,
+			heads: heads
+			}
+		end
+
+		def accepts?(input)
+			resp = consume(input)
+			resp[:accept]
+		end
+
+		def transition(state, symbol)
+			dests = @transitions[state][symbol]
+			dests = [dests] unless dests.kind_of? Array
+			dests
+		end
+
+		
+
+		def accept_state?(state)
+			@accept.include? state
+		end
+
 	end 
 end

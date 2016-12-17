@@ -1,3 +1,4 @@
+require 'json'
 module Parent
 	class Parent
 		attr_accessor :states, :alphabet, :start, :accept, :transitions
@@ -18,6 +19,20 @@ module Parent
 			return element unless element.kind_of? Hash
 			element = element.inject({}){|h,(k,v)| h[k.to_s] = Hash.keys_to_strings(v); h}
 			return element
+		end
+	end
+
+	class FSM
+		def self.convert_from_fsm(json)
+			element = JSON.parse(json)
+			alphabet = Set.new
+			states = Set.new
+			transitions = Set.new
+
+		end
+
+		def self.convert_to_fsm(elements={})
+
 		end
 	end
 end
