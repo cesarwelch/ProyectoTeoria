@@ -1,0 +1,2 @@
+module AutomataTestHelper
+end
