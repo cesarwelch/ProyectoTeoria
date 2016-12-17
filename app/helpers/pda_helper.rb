@@ -15,10 +15,10 @@ module PdaHelper
       resp[:accept]
     end
 
-    #Metodo de transiciones
+    #Metodo transiciones
     def transition()
     end
 
-     
+
   end
 end
