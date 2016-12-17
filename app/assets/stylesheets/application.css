@@ -1,3 +1,0 @@
-@import "materialize/components/color";
-$primary-color: color("deep-purple", "darken-1") !default;
-@import 'materialize';

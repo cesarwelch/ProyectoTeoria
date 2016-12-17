@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ProyectoTeoria</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <title>Proyecto Teoria</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 
 <body>
-	<nav >
-		<div>
-			<ul class="side-nav">
-		        <li><a href="/dfa">DFA</a></li>
-		        <li><a href="/pda">NFA</a></li>
-		        <li><a href="/pda">Regex</a></li>
-		        <li><a href="/pda">CFG</a></li>
-		        <li><a href="/pda">PDA</a></li>
-		        <li><a href="/tm">Turing Machine</a></li>
-      		</ul>	
-		</div>		
-	</nav>
+	<nav>
+    <div class="nav-wrapper">
+      <ul class="side-nav">
+        <li><a href="/dfa">DFA</a></li>
+        <li><a href="/dfa">NFA</a></li>
+        <li><a href="/dfa">Regex</a></li>
+        <li><a href="/pda">PDA</a></li>
+        <li><a href="/dfa">CFG</a></li>
+        <li><a href="/tm">Turing Machine</a></li>
+      </ul>
+    </div>
+  </nav>
 
 	<div class="container">
 		<%= yield %>
