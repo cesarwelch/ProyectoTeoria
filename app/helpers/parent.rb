@@ -23,11 +23,16 @@ module Parent
 	end
 
 	class FSM
-		def self.convert_fsm(json)
+		def self.convert_from_fsm(json)
 			element = JSON.parse(json)
-			alphabet = []
-			states = []
-			transitions = []
+			alphabet = Set.new
+			states = Set.new
+			transitions = Set.new
+
+		end
+
+		def self.convert_to_fsm(elements={})
+
 		end
 	end
 end
