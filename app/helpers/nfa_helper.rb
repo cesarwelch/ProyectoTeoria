@@ -44,9 +44,10 @@ module NfaHelper
 			dests
 		end
 
-		def has_transition?(state, symbol)
-			return false unless @transitions.include? state
-			@transitions[state].has_key? symbol
+		
+
+		def accept_state?(state)
+			@accept.include? state
 		end
 
 	end 
