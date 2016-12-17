@@ -25,10 +25,30 @@ module Parent
 	class FSM
 		def self.convert_from_fsm(json)
 			element = JSON.parse(json)
+
 			alphabet = Set.new
+			accept = Set.new
 			states = Set.new
 			transitions = Set.new
 
+			element['nodes'].each do |node|
+				states.add(node['text'])
+				if node['isAcceptState']
+					accept.add(node['text'])
+				end
+			end
+			element['links'].each do |link|
+				alphabet.add(link['text'])
+				if link['type'] == 'Link'
+					from = element['nodes'][link['nodeA']]['text']
+					to = element['nodes'][link['nodeB']]['text']
+					with = link['text']
+				elsif link['type'] == 'SelfLink'
+					from, to = element['nodes'][link['node']]['text']
+					with = link['text']
+				end
+
+			end
 		end
 
 		def self.convert_to_fsm(elements={})
