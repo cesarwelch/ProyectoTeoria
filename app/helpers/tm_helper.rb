@@ -101,6 +101,5 @@ module TmHelper
 			@storage.join.sub(/^@*/, '').sub(/@*$/, '')
 		end
 	end
-
-
 end
+
