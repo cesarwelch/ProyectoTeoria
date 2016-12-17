@@ -16,42 +16,41 @@ module PdaHelper
     end
 
     def transition(state, symbol, stackTop=nil)
-      dests = []
+  			dests = []
 
-			if has_transition?(state, symbol)
-				actions = @transitions[state][symbol]
-				stackTop ||= @stack.last
-				able = true
-				@stack.push actions['push'] if actions['push']
-				if actions['pop']
-					able = false unless stackTop == actions['pop']
-					@stack.pop if able
-				end
+  			if has_transition?(state, symbol)
+  				actions = @transitions[state][symbol]
+  				stackTop ||= @stack.last
+  				able = true
+  				@stack.push actions['push'] if actions['push']
+  				if actions['pop']
+  					able = false unless stackTop == actions['pop']
+  					@stack.pop if able
+  				end
 
-        if able
-					dests << actions['to']
+  				if able
+  					dests << actions['to']
 
-					if has_transition?(actions['to'], '&')
-						actions = @transitions[actions['to']]['&']
-						able = true
-						@stack.push actions['push'] if actions['push']
-						if actions['pop']
-							able = false unless @stack.last == actions['pop']
-							@stack.pop if able
-					  end
-					if able
-							dests << actions['to']
-					end
-				end
-          dests
-        else
-          return dests
-        end
-        else
-          return []
-        end
-      end
-    end
+  					if has_transition?(actions['to'], '&')
+  						actions = @transitions[actions['to']]['&']
+  						able = true
+  						@stack.push actions['push'] if actions['push']
+  						if actions['pop']
+  							able = false unless @stack.last == actions['pop']
+  							@stack.pop if able
+  						end
+  						if able
+  							dests << actions['to']
+  						end
+  					end
+  					dests
+  				else
+  					return dests
+  				end
+  			else
+  				return []
+  			end
+  		end
 
     def pop?(symbol)
 			@stack.last == symbol
@@ -68,7 +67,6 @@ module PdaHelper
       end
     end
 
-    #Metodo aceptar
     def accept_state?(state)
       @accept.include? state
     end
@@ -78,7 +76,6 @@ module PdaHelper
       return false
     end
 
-    #Metodo Consumir cadena
     def consume(input)
       movements = []
       heads, @stack, accept = [@start], [], false
@@ -101,13 +98,11 @@ module PdaHelper
         heads.each do |head|
           if has_transition?(head, symbol)
             transition(head, symbol).each { |t| newHeads << t
-
             }
-
           end
         end
-        newHeads.each do |pejui|
-          movements.push({state: pejui, via: symbol})
+        newHeads.each do |kstate|
+          movements.push({state: kstate, via: symbol})
         end
         heads = newHeads
 
@@ -120,11 +115,11 @@ module PdaHelper
         heads: heads,
         stack: @stack,
         movements: movements,
-                states: @states,
-                alphabet: @alphabet,
-                start: @start,
-                accept_state: @accept,
-                transitions: @transitions
+            states: @states,
+            alphabet: @alphabet,
+            start: @start,
+            accept_state: @accept,
+            transitions: @transitions
       }
     end
   end
