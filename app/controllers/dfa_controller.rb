@@ -5,10 +5,6 @@ class DfaController < ApplicationController
         @dfa = DfaHelper::DFA.new
     end
 
-    def test
-      return params
-    end
-
     def compute
         hash = DfaHelper::FSM.convert_from_fsm(params['data'])
         hash = JSON.parse(hash) if hash.is_a?(String)
