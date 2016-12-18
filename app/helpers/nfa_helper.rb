@@ -53,7 +53,7 @@ module NfaHelper
 	class NFA < Parent::Parent
 		def consume(input)
 			heads = [@start]
-
+			movements = [{state: @start.to_s, via: "-"}]
 			if has_transition?(@start, '&')
 			transition(@start, '&').each { |h| heads << h }
 			end
@@ -62,11 +62,13 @@ module NfaHelper
 			heads.each do |head|
 				if has_transition?(head, symbol)
 					transition(head, symbol).each { |t| newHeads << t }
+					movements.push({state: head, via: symbol})
 				end
 			end
 			newHeads.each do |head|
 				if has_transition?(head, '&')
 					transition(head, '&').each { |t| eTrans << t }
+					movements.push({state: head, via: symbol})
 				end
 			end
 			eTrans.each { |t| newHeads << t }
@@ -81,6 +83,17 @@ module NfaHelper
 			input: input,
 			accept: accept,
 			heads: heads
+			}
+			resp = {
+				input: input,
+				accept: accept,
+				head: heads,
+				movements: movements,
+				states: @states,
+				alphabet: @alphabet,
+				start: @start,
+				accept_state: @accept,
+				transitions: @transitions
 			}
 		end
 
