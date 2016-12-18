@@ -1,14 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ProyectoTeoria</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <title>Proyecto Teoria</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
+
 <body>
+
+ <nav>
+    <div class="nav-wrapper green">
+      <a href="#" class="brand-logo">Logo</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="/dfa">DFA</a></li>
+        <li><a href="/dfa">NFA</a></li>
+        <li><a href="/dfa">Regex</a></li>
+        <li><a href="/pda">PDA</a></li>
+        <li><a href="/dfa">CFG</a></li>
+        <li><a href="/tm">Turing Machine</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
 	<div class="container">
 		<%= yield %>
 	</div>
+
 </body>
 </html>
