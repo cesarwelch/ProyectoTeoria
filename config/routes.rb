@@ -1,11 +1,14 @@
 Rails.application.routes.draw do
   get 'automata_test/index'
 
+  get '/pda', to: 'pda#index', as: :pda
   get '/dfa', to: 'dfa#index', as: :dfa
   post '/dfa/compute', to: 'dfa#compute', as: :dfa_compute
  #post '/dfa/consume', to: 'dfa#consume', as: :dfa_consume
 
   get '/tm', to: 'tm#index', as: :tm
+
+  get '/nfa', to: 'nfa#index', as: :nfa
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
