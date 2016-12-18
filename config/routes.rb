@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
 
   get '/tm', to: 'tm#index', as: :tm
+  get '/nfa', to: 'nfa#index', as: :nfa
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
