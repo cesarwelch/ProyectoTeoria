@@ -122,8 +122,7 @@ class PdaController < ApplicationController
 
     end
 
-    #def index
-    #end
+
 
     private
       def pda_params
