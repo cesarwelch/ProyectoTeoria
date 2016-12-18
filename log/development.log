@@ -2785,3 +2785,93 @@ Started GET "/tm" for ::1 at 2016-12-17 18:31:49 -0600
 Processing by TmController#index as HTML
   Rendered tm/index.html.erb within layouts/application (0.0ms)
 Completed 200 OK in 70ms (Views: 69.9ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/tm" for ::1 at 2016-12-17 19:03:52 -0600
+Processing by TmController#index as HTML
+  Rendered tm/index.html.erb within layouts/application (2.0ms)
+Completed 200 OK in 247ms (Views: 238.7ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/tm" for ::1 at 2016-12-17 19:18:16 -0600
+Processing by TmController#index as HTML
+  Rendered tm/index.html.erb within layouts/application (2.0ms)
+Completed 200 OK in 251ms (Views: 241.8ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/tm" for ::1 at 2016-12-17 19:19:01 -0600
+Processing by TmController#index as HTML
+  Rendered tm/index.html.erb within layouts/application (1.0ms)
+Completed 200 OK in 50ms (Views: 49.5ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/tm" for ::1 at 2016-12-17 19:25:49 -0600
+Processing by TmController#index as HTML
+  Rendered tm/index.html.erb within layouts/application (1.0ms)
+Completed 200 OK in 67ms (Views: 66.8ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/tm" for ::1 at 2016-12-17 19:26:02 -0600
+Processing by TmController#index as HTML
+  Rendered tm/index.html.erb within layouts/application (1.0ms)
+Completed 200 OK in 51ms (Views: 50.9ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/tm" for ::1 at 2016-12-17 19:26:16 -0600
+Processing by TmController#index as HTML
+  Rendered tm/index.html.erb within layouts/application (1.0ms)
+Completed 200 OK in 73ms (Views: 72.2ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/tm" for ::1 at 2016-12-17 19:26:21 -0600
+Processing by TmController#index as HTML
+  Rendered tm/index.html.erb within layouts/application (0.0ms)
+Completed 200 OK in 55ms (Views: 55.2ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/tm" for ::1 at 2016-12-17 19:26:22 -0600
+Processing by TmController#index as HTML
+  Rendered tm/index.html.erb within layouts/application (0.0ms)
+Completed 200 OK in 57ms (Views: 57.7ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/tm" for ::1 at 2016-12-17 19:26:22 -0600
+Processing by TmController#index as HTML
+  Rendered tm/index.html.erb within layouts/application (0.0ms)
+Completed 200 OK in 48ms (Views: 47.0ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/tm" for ::1 at 2016-12-17 19:26:27 -0600
+Processing by TmController#index as HTML
+  Rendered tm/index.html.erb within layouts/application (0.0ms)
+Completed 200 OK in 49ms (Views: 48.1ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/tm" for ::1 at 2016-12-17 19:26:32 -0600
+Processing by TmController#index as HTML
+  Rendered tm/index.html.erb within layouts/application (1.0ms)
+Completed 200 OK in 50ms (Views: 49.3ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/tm" for ::1 at 2016-12-17 19:27:13 -0600
+Processing by TmController#index as HTML
+  Rendered tm/index.html.erb within layouts/application (0.0ms)
+Completed 200 OK in 50ms (Views: 49.7ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/tm" for ::1 at 2016-12-17 19:27:22 -0600
+Processing by TmController#index as HTML
+  Rendered tm/index.html.erb within layouts/application (0.0ms)
+Completed 200 OK in 52ms (Views: 52.1ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/tm" for ::1 at 2016-12-17 19:27:41 -0600
+Processing by TmController#index as HTML
+  Rendered tm/index.html.erb within layouts/application (0.0ms)
+Completed 200 OK in 49ms (Views: 48.4ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/tm" for ::1 at 2016-12-17 19:27:45 -0600
+Processing by TmController#index as HTML
+  Rendered tm/index.html.erb within layouts/application (1.0ms)
+Completed 200 OK in 47ms (Views: 46.7ms | ActiveRecord: 0.0ms)
