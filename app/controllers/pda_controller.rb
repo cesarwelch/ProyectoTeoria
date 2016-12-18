@@ -7,9 +7,8 @@ class PdaController < ApplicationController
   end
 
   def compute
-      hash = pda_params
+      hash = DfaHelper::FSM.convert_from_fsm(params['data'])
       hash = JSON.parse(hash) if hash.is_a?(String)
-
       @pda = PdaHelper::PDA.new
       @pda.states = hash['states'].split(',') # ["S", "A", "B", "ha"]
       @pda.alphabet = hash['alphabet'].split(/\s*,\s*/) # ["(", ")", "&"]
@@ -69,16 +68,16 @@ class PdaController < ApplicationController
         end
       end
 
-      @bringElements = {
-        nodes: nodes,
-        edges: edges
-      }.to_json.html_safe
+      response = {
+          nodes: nodes,
+          edges: edges
+        }.to_json
+      render :json => response
   end
 
   def consume
-        hash = pda_params
+        hash = DfaHelper::FSM.convert_from_fsm(params['data'])
         hash = JSON.parse(hash) if hash.is_a?(String)
-
         @pda = PdaHelper::PDA.new
         @pda.states = hash['states'].split(' ')
         @pda.alphabet = hash['alphabet'].split(' ')
@@ -90,7 +89,7 @@ class PdaController < ApplicationController
                             "B"=>{"("=>{"to"=>"A", "push"=>"x"}, ")"=>{"to"=>"B", "pop"=>"x"},
                             "&"=>{"to"=>"ha", "pop"=>"@"}}
                         }
-        @compute = @pda.consume(hash['input_string'])
+        @compute = @pda.consume(params['string'])
 
         nodes = []
         edges = []
@@ -115,10 +114,13 @@ class PdaController < ApplicationController
           end
         end
 
-        @bringElements = {
+        response = {
           nodes: nodes,
-          edges: edges
-        }.to_json.html_safe
+          edges: edges,
+          movements: @compute[:movements],
+          accept: @compute[:accept]
+        }.to_json
+        render :json => response
 
     end
 
