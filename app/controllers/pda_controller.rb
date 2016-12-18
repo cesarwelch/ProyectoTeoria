@@ -122,8 +122,13 @@ class PdaController < ApplicationController
 
     end
 
+<<<<<<< HEAD
     def index
     end
+=======
+    #def index
+    #end
+>>>>>>> 21ff3c90d6eae4053319e6defd9dddff8896c5e1
 
     private
       def pda_params
