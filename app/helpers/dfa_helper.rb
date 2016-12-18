@@ -48,10 +48,6 @@ module DfaHelper
 				"start": start
 			}.to_json
 		end
-
-		# def self.convert_to_fsm(elements={})
-
-		# end
 	end
 
 	class DFA < Parent::Parent
