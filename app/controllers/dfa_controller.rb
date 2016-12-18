@@ -5,15 +5,19 @@ class DfaController < ApplicationController
         @dfa = DfaHelper::DFA.new
     end
 
+    def test
+      return params
+    end
+
     def compute
-        hash = dfa_params
+        hash = DfaHelper::FSM.convert_from_fsm(params['data'])
         hash = JSON.parse(hash) if hash.is_a?(String)
         @dfa = DfaHelper::DFA.new()
-        @dfa.states = hash['states'].split(',')
-        @dfa.alphabet = hash['alphabet'].split(/\s*,\s*/)
+        @dfa.states = hash['states']
+        @dfa.alphabet = hash['alphabet']
         @dfa.start = hash['start']
-        @dfa.accept = hash['accept'].split(/\s*,\s*/)
-        @dfa.transitions = JSON.parse(hash['transitions'])
+        @dfa.accept = hash['accept']
+        @dfa.transitions = hash['transitions']
         trans_map = Hash.new
         @dfa.transitions.each do |t|
           if trans_map[t['current_state']] == nil
@@ -39,25 +43,32 @@ class DfaController < ApplicationController
           i = i+1
         end
       end
-
-      @NodeAndTrans = {
+      response = {
           nodes: nodes,
           edges: edges
-        }.to_json.html_safe
+        }.to_json
+      render :json => response
     end
 
     def consume
-        hash = dfa_params
+        hash = DfaHelper::FSM.convert_from_fsm(params['data'])
         hash = JSON.parse(hash) if hash.is_a?(String)
-
         @dfa = DfaHelper::DFA.new()
-        @dfa.states = hash['states'].split(' ')
-        @dfa.alphabet = hash['alphabet'].split(' ')
+        @dfa.states = hash['states']
+        @dfa.alphabet = hash['alphabet']
         @dfa.start = hash['start']
-        @dfa.accept = hash['accept'].split(' ')
-        puts(@dfa.transitions)
-        @dfa.transitions = JSON.parse(hash['transitions'])
-        @compute = @dfa.consume(hash['input_string'])
+        @dfa.accept = hash['accept']
+        @dfa.transitions = hash['transitions']
+        trans_map = Hash.new
+        @dfa.transitions.each do |t|
+          if trans_map[t['current_state']] == nil
+            trans_map[t['current_state']] = {t['symbol'] => t['destination']}
+          else
+            trans_map[t['current_state']] = trans_map[t['current_state']].merge({t['symbol'] => t['destination']})
+          end
+        end
+        @dfa.transitions = trans_map
+        @compute = @dfa.consume(params['string'])
 
         nodes = []
         edges = []
@@ -76,14 +87,17 @@ class DfaController < ApplicationController
           end
         end
 
-        @NodeAndTrans = {
-            nodes: nodes,
-            edges: edges
-        }.to_json.html_safe
+        response = {
+          nodes: nodes,
+          edges: edges,
+          movements: @compute[:movements],
+          accept: @compute[:accept]
+        }.to_json
+        render :json => response
     end
 
     private
         def dfa_params
-          params.permit(:states, :alphabet, :start, :accept, :transitions, :input_string)
+          params.permit(:states, :alphabet, :start, :accept, :transitions, :input_string, :test)
         end
 end

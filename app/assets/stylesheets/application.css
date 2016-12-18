@@ -1,0 +1,13 @@
+#cy {
+    width: 100%;
+    height: 30em;
+    display: block;
+}
+
+#accept {
+	background: green;
+}
+
+#reject {
+	background: red;
+}
