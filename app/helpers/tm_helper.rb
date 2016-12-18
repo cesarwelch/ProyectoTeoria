@@ -1,4 +1,61 @@
 module TmHelper
+
+	class FSM
+		def self.convert_from_fsm(json)
+			element = JSON.parse(json)
+
+			alphabet = Set.new
+			accept = Set.new
+			states = Set.new
+			transitions = []
+			start = nil
+
+			element['nodes'].each do |node|
+				states.add(node['text'])
+				if node['isAcceptState']
+					accept.add(node['text'])
+				end
+			end
+			element['links'].each do |link|
+				if link['type'] == 'Link'
+					from = element['nodes'][link['nodeA']]['text']
+					to = element['nodes'][link['nodeB']]['text']
+					with = link['text'].split(',')[0]
+					push = link['text'].split(',')[1].split('->')[1]
+					pop = link['text'].split(',')[1].split('->')[0]
+				elsif link['type'] == 'SelfLink'
+					from = element['nodes'][link['node']]['text']
+					to = element['nodes'][link['node']]['text']
+					with = link['text'].split(',')[0]
+					push = link['text'].split(',')[1].split('->')[1]
+					pop = link['text'].split(',')[1].split('->')[0]
+				end
+				if link['type'] != 'StartLink'
+					if with != '&'
+						alphabet.add(with)
+					end
+					transitions.push({
+						"current_state": from,
+						"symbol": with,
+						"destination": to,
+						"push": "push",
+						"pop": "pop"
+					})
+				end
+				if link['type'] == 'StartLink'
+					start = element['nodes'][link['node']]['text']
+				end
+			end
+			return {
+				"alphabet": alphabet.to_a,
+				"accept": accept.to_a,
+				"states": states.to_a,
+				"transitions": transitions,
+				"start": start
+			}.to_json
+		end
+	end
+
 	class TM < Parent::Parent
 		attr_accessor :inputAlphabet, :tapeAlphabet, :tape, :reject
 
@@ -13,7 +70,7 @@ module TmHelper
 			@reject = false
 		end
 
-		def feed(input) 
+		def feed(input)
 			@tape = TMTape.new(input)
 			@accept = false
 			@reject = false
@@ -29,7 +86,7 @@ module TmHelper
 					stateHead = toState
 				end
 			end
-		      
+
 			resp = {
 				input: input,
 				movements: movements,
