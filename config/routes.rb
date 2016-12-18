@@ -1,10 +1,9 @@
 Rails.application.routes.draw do
+  get 'automata_test/index'
 
-  get '/automata_test', to: 'automata_test#index', as: :automata_test
-  get '/nfa', to: 'nfa#index', as: :nfa
-  get '/dfa', to: 'dfa#index', as: :dfa
-  get '/dfa/view', to: 'dfa#view', as: :dfa_view
 
+  get '/tm', to: 'tm#index', as: :tm
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
