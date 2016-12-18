@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   get 'automata_test/index'
-
+  get '/pda', to: 'pda#index', as: :pda
 
   get '/tm', to: 'tm#index', as: :tm
-  
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
