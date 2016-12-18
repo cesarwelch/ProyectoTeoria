@@ -3,12 +3,9 @@ Rails.application.routes.draw do
   get '/pda', to: 'pda#index', as: :pda
 
   get '/tm', to: 'tm#index', as: :tm
-<<<<<<< HEAD
 
-=======
   get '/nfa', to: 'nfa#index', as: :nfa
   
->>>>>>> 21ff3c90d6eae4053319e6defd9dddff8896c5e1
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
