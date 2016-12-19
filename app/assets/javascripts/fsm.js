@@ -1,4 +1,4 @@
-	var greekLetterNames = [ 'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Theta', 'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho', 'Sigma', 'Tau', 'Upsilon', 'Phi', 'Chi', 'Psi', 'Omega' ];
+var greekLetterNames = [ 'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Theta', 'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho', 'Sigma', 'Tau', 'Upsilon', 'Phi', 'Chi', 'Psi', 'Omega' ];
 
 function convertLatexShortcuts(text) {
 	// html greek characters
@@ -102,6 +102,14 @@ var currentLink = null; // a Link
 var movingObject = false;
 var originalClick;
 
+function clear_fsm(){
+ 	nodes = [];
+ 	links = [];
+ 	localStorage.removeItem('fsm');
+ 	var context = canvas.getContext('2d')
+ 	context.clearRect(0, 0, canvas.width, canvas.height);
+ }
+
 function drawUsing(c) {
 	c.clearRect(0, 0, canvas.width, canvas.height);
 	c.save();
@@ -165,7 +173,7 @@ function restoreBackup() {
 
 	try {
 		var backup = JSON.parse(localStorage['fsm']);
-
+		console.log(backup)
 		for(var i = 0; i < backup.nodes.length; i++) {
 			var backupNode = backup.nodes[i];
 			var node = new Node(backupNode.x, backupNode.y);

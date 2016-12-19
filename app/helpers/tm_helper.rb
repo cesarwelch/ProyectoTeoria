@@ -21,30 +21,14 @@ module TmHelper
 					from = element['nodes'][link['nodeA']]['text']
 					to = element['nodes'][link['nodeB']]['text']
 					with = link['text'].split(',')[0]
-					if link['text'].split(',')[1].split('->')[1] != '&'
-						push = link['text'].split(',')[1].split('->')[1]
-					else
-						push = nil
-					end
-					if link['text'].split(',')[1].split('->')[0] != '&'
-						pop = link['text'].split(',')[1].split('->')[0]
-					else
-						pop = nil
-					end
+					push = link['text'].split(',')[1].split('->')[1]
+					pop = link['text'].split(',')[1].split('->')[0]
 				elsif link['type'] == 'SelfLink'
 					from = element['nodes'][link['node']]['text']
 					to = element['nodes'][link['node']]['text']
 					with = link['text'].split(',')[0]
-					if link['text'].split(',')[1].split('->')[1] != '&'
-						push = link['text'].split(',')[1].split('->')[1]
-					else
-						push = nil
-					end
-					if link['text'].split(',')[1].split('->')[0] != '&'
-						pop = link['text'].split(',')[1].split('->')[0]
-					else
-						pop = nil
-					end
+					push = link['text'].split(',')[1].split('->')[1]
+					pop = link['text'].split(',')[1].split('->')[0]
 				end
 				if link['type'] != 'StartLink'
 					if with != '&' and with != 'ACCEPT'
@@ -54,8 +38,8 @@ module TmHelper
 						"current_state": from,
 						"symbol": with,
 						"destination": to,
-						"write": push,
-						"move": pop
+						"write": pop,
+						"move": push
 					})
 				end
 				if link['type'] == 'StartLink'

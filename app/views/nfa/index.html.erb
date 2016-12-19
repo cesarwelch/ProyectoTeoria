@@ -2,10 +2,11 @@
 	<h1 class = "green-text text-darken-4 center-align">NFA Designer</h1>
 	 <div class="row valign-wrapper">
             <div class="col s4">
-              <a class="waves-effect waves-light btn-large green col m8 offset-m3" id="con_nfa_btn">Convert to DFA</a>
+              <a class="waves-effect waves-light btn-large green" id="con_nfa_btn" onclick="load_1()">NFA A*B*C*</a>
             </div>
+
             <div class="col s4">
-              <a class="waves-effect waves-light btn-large green col m8 offset-m3" id="con_regex_btn">Convert to Regex</a>
+              <a class="waves-effect waves-light btn-large green" id="borrar" onclick="clear_fsm()">Borrar</a>
             </div>
             <div class="col s4">
               <a class="waves-effect waves-light btn-large green col m8 offset-m3" id="send_btn" onclick="send_data()">Process</a>
@@ -49,6 +50,13 @@
 <script type="text/javascript">
 var cy_data = null
 
+function load_1() {
+  clear_fsm()
+  localStorage['fsm'] = '{"nodes":[{"x":155,"y":213,"text":"q0","isAcceptState":false},{"x":306,"y":213,"text":"q1","isAcceptState":false},{"x":437,"y":213,"text":"q2","isAcceptState":true}],"links":[{"type":"Link","nodeA":0,"nodeB":1,"text":"&","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"Link","nodeA":1,"nodeB":2,"text":"&","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"StartLink","node":0,"text":"","deltaX":-78,"deltaY":0},{"type":"SelfLink","node":0,"text":"a","anchorAngle":-1.446441332248135},{"type":"SelfLink","node":1,"text":"b","anchorAngle":-1.5707963267948966},{"type":"SelfLink","node":2,"text":"c","anchorAngle":-1.5707963267948966}]}'
+  restoreBackup()
+  draw()
+}
+
 function send_data() {
   $.ajax({
     type: "POST",
@@ -62,6 +70,7 @@ function send_data() {
       $("#con_regex_btn").fadeOut()
       $("#canvas").fadeOut()
       $("#send_btn").fadeOut()
+      $("#borrar").fadeOut()
       render_cy()
       $("#cy").fadeIn()
       $("#input").fadeIn()
@@ -153,6 +162,7 @@ function render_cy(){
       }
     });
     cy.layout({ name: 'circle' });
+    cy.fit()
 }
 
 function render_movements(){

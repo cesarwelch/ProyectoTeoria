@@ -2,13 +2,16 @@
   <h1 class = "green-text text-darken-4 center-align">DFA Designer</h1>
   <div class="row valign-wrapper">
             <div class="col s4">
-              <a class="waves-effect waves-light btn-large green col m8 offset-m3" id="con_nfa_btn">Convert to NFA</a>
+              <a class="waves-effect waves-light btn-large green" id="con_nfa_btn" onclick="load_1()">Multiplo de 3</a>
             </div>
             <div class="col s4">
-              <a class="waves-effect waves-light btn-large green col m8 offset-m3" id="con_regex_btn">Convert to Regex</a>
+              <a class="waves-effect waves-light btn-large green" id="con_regex_btn" onclick="load_2()">0's pares y 1's pares</a>
             </div>
             <div class="col s4">
-              <a class="waves-effect waves-light btn-large green col m8 offset-m3" id="send_btn" onclick="send_data()">Process</a>
+              <a class="waves-effect waves-light btn-large green" id="borrar" onclick="clear_fsm()">Borrar</a>
+            </div>
+            <div class="col s4">
+              <a class="waves-effect waves-light btn-large green" id="send_btn" onclick="send_data()">Process</a>
             </div>
       </div>
 
@@ -50,6 +53,20 @@
 <script type="text/javascript">
 var cy_data = null
 
+function load_1() {
+  clear_fsm()
+  localStorage['fsm'] = '{"nodes":[{"x":277,"y":162,"text":"q0","isAcceptState":true},{"x":432,"y":330,"text":"q1","isAcceptState":false},{"x":174,"y":330,"text":"q2","isAcceptState":false}],"links":[{"type":"StartLink","node":0,"text":"","deltaX":-56,"deltaY":-70},{"type":"Link","nodeA":0,"nodeB":1,"text":"1","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"SelfLink","node":0,"text":"0","anchorAngle":2.0899424410414196},{"type":"Link","nodeA":1,"nodeB":0,"text":"1","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"Link","nodeA":2,"nodeB":1,"text":"0","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"Link","nodeA":1,"nodeB":2,"text":"0","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"SelfLink","node":2,"text":"1","anchorAngle":1.4513674007765582}]}'
+  restoreBackup()
+  draw()
+}
+
+function load_2() {
+  clear_fsm()
+  localStorage['fsm'] = '{"nodes":[{"x":166,"y":151,"text":"q0","isAcceptState":true},{"x":371,"y":151,"text":"q1","isAcceptState":false},{"x":160,"y":309,"text":"q3","isAcceptState":false},{"x":371,"y":299,"text":"q2","isAcceptState":false}],"links":[{"type":"StartLink","node":0,"text":"","deltaX":-58,"deltaY":-73},{"type":"Link","nodeA":0,"nodeB":1,"text":"1","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"Link","nodeA":1,"nodeB":0,"text":"1","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"Link","nodeA":1,"nodeB":3,"text":"0","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"Link","nodeA":3,"nodeB":1,"text":"0","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"Link","nodeA":3,"nodeB":2,"text":"1","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"Link","nodeA":2,"nodeB":3,"text":"1","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"Link","nodeA":2,"nodeB":0,"text":"0","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"Link","nodeA":0,"nodeB":2,"text":"0","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0}]}'
+  restoreBackup()
+  draw()
+}
+
 function send_data() {
 	$.ajax({
 		type: "POST",
@@ -63,6 +80,7 @@ function send_data() {
       $("#con_regex_btn").fadeOut()
 			$("#canvas").fadeOut()
 			$("#send_btn").fadeOut()
+      $("#borrar").fadeOut()
 			render_cy()
 			$("#cy").fadeIn()
 			$("#input").fadeIn()

@@ -2,13 +2,13 @@
   <h1 class = "green-text text-darken-4 center-align">PDA Designer</h1>
   <div class="row valign-wrapper">
             <div class="col s4">
-              <a class="waves-effect waves-light btn-large green col m8 offset-m3" id="con_nfa_btn">Convert to NFA</a>
+              <a class="waves-effect waves-light btn-large green" id="con_regex_btn" onclick="load_2()">Misma cantidad de 0's que de 1's</a>
             </div>
             <div class="col s4">
-              <a class="waves-effect waves-light btn-large green col m8 offset-m3" id="con_regex_btn">Convert to Regex</a>
+              <a class="waves-effect waves-light btn-large green" id="borrar" onclick="clear_fsm()">Borrar</a>
             </div>
             <div class="col s4">
-              <a class="waves-effect waves-light btn-large green col m8 offset-m3" id="send_btn" onclick="send_data()">Process</a>
+              <a class="waves-effect waves-light btn-large green" id="send_btn" onclick="send_data()">Process</a>
             </div>
       </div>
 
@@ -50,6 +50,14 @@
 <script type="text/javascript">
 var cy_data = null
 
+
+function load_2() {
+  clear_fsm()
+  localStorage['fsm'] = '{"nodes":[{"x":155,"y":213,"text":"q0","isAcceptState":true},{"x":432,"y":213,"text":"q1","isAcceptState":false},{"x":432,"y":390,"text":"q3","isAcceptState":false},{"x":152,"y":390,"text":"q4","isAcceptState":true}],"links":[{"type":"StartLink","node":0,"text":"","deltaX":-78,"deltaY":0},{"type":"Link","nodeA":0,"nodeB":1,"text":"&,&->$","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"SelfLink","node":1,"text":"0,&->0","anchorAngle":-1.3876855095324125},{"type":"Link","nodeA":1,"nodeB":2,"text":"1,0->&","lineAngleAdjust":3.141592653589793,"parallelPart":0.5028248587570622,"perpendicularPart":0},{"type":"Link","nodeA":2,"nodeB":3,"text":"&,$->&","lineAngleAdjust":3.141592653589793,"parallelPart":0.44285714285714284,"perpendicularPart":0},{"type":"SelfLink","node":2,"text":"1,0->&","anchorAngle":0.7853981633974483}]}'
+  restoreBackup()
+  draw()
+}
+
 function send_data() {
 	$.ajax({
 		type: "POST",
@@ -62,7 +70,8 @@ function send_data() {
       $("#con_nfa_btn").fadeOut()
       $("#con_regex_btn").fadeOut()
 			$("#canvas").fadeOut()
-			$("#send_btn").fadeOut()
+      $("#send_btn").fadeOut()
+			$("#borrar").fadeOut()
 			render_cy()
 			$("#cy").fadeIn()
 			$("#input").fadeIn()

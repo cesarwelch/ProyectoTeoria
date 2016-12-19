@@ -2,6 +2,13 @@
   <h1 class = "green-text text-darken-4 center-align">TM Designer</h1>
   <div class="row valign-wrapper">
             <div class="col s4">
+              <a class="waves-effect waves-light btn-large green" id="con_regex_btn" onclick="load_1()">
+              Substring 101</a>
+            </div>
+            <div class="col s4">
+              <a class="waves-effect waves-light btn-large green" id="borrar" onclick="clear_fsm()">Borrar</a>
+            </div>
+            <div class="col s4">
               <a class="waves-effect waves-light btn-large green col m8 offset-m3" id="send_btn" onclick="send_data()">Process</a>
             </div>
       </div>
@@ -44,19 +51,27 @@
 <script type="text/javascript">
 var cy_data = null
 
+function load_1() {
+  clear_fsm()
+  localStorage['fsm'] = '{"nodes":[{"x":172,"y":201,"text":"A","isAcceptState":false},{"x":400,"y":201,"text":"B","isAcceptState":false},{"x":625,"y":208,"text":"C","isAcceptState":false},{"x":658,"y":342,"text":"ACCEPT","isAcceptState":true}],"links":[{"type":"StartLink","node":0,"text":"","deltaX":-88,"deltaY":-10},{"type":"Link","nodeA":0,"nodeB":1,"text":"1,1->R","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"Link","nodeA":1,"nodeB":2,"text":"0,0->R","lineAngleAdjust":0,"parallelPart":0.546828748470616,"perpendicularPart":0},{"type":"SelfLink","node":0,"text":"0,0->R","anchorAngle":-1.23187857736677},{"type":"SelfLink","node":1,"text":"1,1->R","anchorAngle":1.5707963267948966},{"type":"Link","nodeA":2,"nodeB":3,"text":"1,1->R","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"Link","nodeA":2,"nodeB":0,"text":"0,0->R","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0}]}'
+  restoreBackup()
+  draw()
+}
+
 function send_data() {
   $.ajax({
     type: "POST",
     url: '/tm/compute',
     data: {"data": localStorage['fsm']},
     success: function(data){
-    
+
       cy_data = data
       $("#instructions").fadeOut()
       $("#con_nfa_btn").fadeOut()
       $("#con_regex_btn").fadeOut()
       $("#canvas").fadeOut()
       $("#send_btn").fadeOut()
+      $("#borrar").fadeOut()
       render_cy()
       $("#cy").fadeIn()
       $("#input").fadeIn()
