@@ -2,7 +2,7 @@
     <h1 class = "green-text text-darken-4 center-align">Turing Machine Designer</h1>
      <div class="row valign-wrapper">
             <div class="col s6">
-              <a class="waves-effect waves-light btn-large green col m8 offset-m3" id="send_btn">Process</a>
+              <a class="waves-effect waves-light btn-large green col m8 offset-m3" id="send_btn" onclick="send_data()">Process</a>
             </div>
       </div>
 
@@ -70,5 +70,35 @@
   		}
   	});
   }
+
+  function send_string() {
+  	$("#accept").fadeOut()
+  	$("#reject").fadeOut()
+  	$.ajax({
+  		type: "POST",
+  		url: '/tm/consume',
+  		data: {
+  			"data": localStorage['fsm'],
+  			"string": $("#string").val()
+  		},
+  		success: function(data){
+  			cy_data = data
+  			$("#canvas").fadeOut()
+  			$("#send_btn").fadeOut()
+  			render_movements()
+  			$("#cy").fadeIn()
+  			$("#input").fadeIn()
+  			if (data['accept']) {
+  				$("#accept").fadeIn()
+  			} else {
+  				$("#reject").fadeIn()
+  			}
+  		},
+  		error: function(){
+  			alert('Favor coroborar que la cadena este correctamente ingresada');
+  		}
+  	});
+  }
+
 
 </script>
