@@ -5,7 +5,7 @@ class TmController < ApplicationController
     end
 
     def compute
-        hash = tm_params
+        hash = TmHelper::FSM.convert_from_fsm(params['data'])
         hash = JSON.parse(hash) if hash.is_a?(String)
 
         @tm = TmHelper::TM.new
@@ -13,8 +13,8 @@ class TmController < ApplicationController
         @tm.states.push('ACCEPT')
         @tm.states.push('REJECT')
         @tm.start = hash['start']
-        @tm.inputAlphabet = hash['inputAlphabet'].split(',')
-        @tm.tapeAlphabet = hash['tapeAlphabet'].split(',')
+        @tm.inputAlphabet = hash['inputAlphabet']
+        @tm.tapeAlphabet = hash['tapeAlphabet']
         @tm.transitions = JSON.parse(hash['transitions'])
         trans_map = Hash.new
         @tm.transitions.each do |t|

@@ -1,26 +1,288 @@
 <div class ="row">
-    <h1 class = "green-text text-darken-4 center-align">Turing Machine Designer</h1>
-     <div class="row valign-wrapper">
-            <div class="col s6">
-              <a class="waves-effect waves-light btn-large green col m8 offset-m3" id="send_btn">Process</a>
+  <h1 class = "green-text text-darken-4 center-align">PDA Designer</h1>
+  <div class="row valign-wrapper">
+            <div class="col s4">
+              <a class="waves-effect waves-light btn-large green col m8 offset-m3" id="con_nfa_btn">Convert to NFA</a>
+            </div>
+            <div class="col s4">
+              <a class="waves-effect waves-light btn-large green col m8 offset-m3" id="con_regex_btn">Convert to Regex</a>
+            </div>
+            <div class="col s4">
+              <a class="waves-effect waves-light btn-large green col m8 offset-m3" id="send_btn" onclick="send_data()">Process</a>
             </div>
       </div>
 
-    <div class ="valign-wrapper">
-        <canvas id="canvas" width="900" height="500" class="z-depth-5 white valign">
-            <span class="error">Your browser does not support<br>the HTML5 &lt;canvas&gt; element</span>
-        </canvas>       
-    </div>
+  <div class ="valign-wrapper">
+    <canvas id="canvas" width="900" height="500" class="z-depth-5 white valign">
+      <span class="error">Your browser does not support<br>the HTML5 &lt;canvas&gt; element</span>
+    </canvas>
+  </div>
 
-    <div class="row">
-      <div class="col s6, flow-text">
-        <ul>
-            <li>Add State: Double Click </li>
-            <li>Add Transition: Shift-drag</li>
-            <li>Move: Drag </li>    
-            <li> Delete: Click & press delete </li>
-            <li>Make accept state: Double Click on existing state </li>
-        </ul>
-      </div>  
-    </div>
+  <div class=" z-depth-5 white white">
+    <div class="cy" id="cy" style="display: none;"></div>
+  </div>
+  <div id="accept" style="display: none;">
+    <center><h4>Acepta</h4></center>
+  </div>
+
+  <div id="reject" style="display: none;">
+    <center><h4>Rechaza</h4></center>
+  </div>
+  <div id="input" style="display: none;">
+    <input id="string" type="text" name="string">
+    <button class="btn" onclick="send_string()">Consume</button>
+  </div>
 </div>
+
+  <div class="row" id="instructions">
+    <div class="col s6, flow-text">
+        <ul>
+          <li>Add State: Double Click </li>
+          <li>Add Transition: Shift-drag</li>
+          <li>Move: Drag </li>
+          <li> Delete: Click & press delete </li>
+          <li>Make accept state: Double Click on existing state </li>
+        </ul>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+var cy_data = null
+
+function send_data() {
+  $.ajax({
+    type: "POST",
+    url: '/tm/compute',
+    data: {"data": localStorage['fsm']},
+    success: function(data){
+    
+      cy_data = data
+      $("#instructions").fadeOut()
+      $("#con_nfa_btn").fadeOut()
+      $("#con_regex_btn").fadeOut()
+      $("#canvas").fadeOut()
+      $("#send_btn").fadeOut()
+      render_cy()
+      $("#cy").fadeIn()
+      $("#input").fadeIn()
+
+    },
+    error: function(err){
+      console.log(err)
+      alert('Favor coroborar que el DFA este correctamente ingresado');
+    }
+  });
+}
+
+function send_string() {
+  $("#accept").fadeOut()
+  $("#reject").fadeOut()
+  $.ajax({
+    type: "POST",
+    url: '/tm/consume',
+    data: {
+      "data": localStorage['fsm'],
+      "string": $("#string").val()
+    },
+    success: function(data){
+      cy_data = data
+      $("#canvas").fadeOut()
+      $("#send_btn").fadeOut()
+      render_movements()
+      $("#cy").fadeIn()
+      $("#input").fadeIn()
+      if (data['accept']) {
+        $("#accept").fadeIn()
+      } else {
+        $("#reject").fadeIn()
+      }
+    },
+    error: function(){
+      alert('Favor coroborar que la cadena este correctamente ingresada');
+    }
+  });
+}
+
+function render_cy(){
+  console.log(cy_data)
+ var cy = cytoscape({
+      container: document.getElementById('cy'),
+
+      zoomingEnabled: true,
+      userZoomingEnabled: false,
+      panningEnabled: true,
+      userPanningEnabled: true,
+
+      boxSelectionEnabled: false,
+      autounselectify: true,
+
+      style: cytoscape.stylesheet()
+        .selector('node')
+          .css({
+            'content': 'data(id)',
+            'text-valign': 'center',
+            'color': 'white',
+            'text-outline-width': 2,
+            'backgrund-color': '#999',
+            'text-outline-color': '#999'
+          })
+        .selector('edge')
+          .css({
+            'target-arrow-shape': 'triangle',
+            'width': 4,
+            'line-color': '#ddd',
+            'label': 'data(label)',
+            'target-arrow-color': '#ddd',
+            'curve-style': 'bezier'
+          })
+        .selector('.highlighted')
+          .css({
+            'background-color': '#5e35b1',
+            'line-color': '#5e35b1',
+            'target-arrow-color': '#5e35b1',
+            'transition-property': 'background-color, line-color, target-arrow-color',
+            'transition-duration': '0.5s'
+          }),
+
+      elements: cy_data,
+
+      layout: {
+        name: 'breadthfirst',
+        directed: true,
+        roots: '#a',
+        padding: 10
+      }
+    });
+}
+
+function render_movements(){
+  var cy = cytoscape({
+      container: document.getElementById('cy'),
+
+      zoomingEnabled: true,
+      userZoomingEnabled: false,
+      panningEnabled: true,
+      userPanningEnabled: true,
+
+      boxSelectionEnabled: false,
+      autounselectify: true,
+
+      style: cytoscape.stylesheet()
+        .selector('node')
+          .css({
+            'content': 'data(id)',
+            'text-valign': 'center',
+            'color': 'white',
+            'text-outline-width': 2,
+            'backgrund-color': '#999',
+            'text-outline-color': '#999'
+          })
+        .selector('edge')
+          .css({
+            'target-arrow-shape': 'triangle',
+            'width': 4,
+            'line-color': '#ddd',
+            'label': 'data(label)',
+            'target-arrow-color': '#ddd',
+            'curve-style': 'bezier'
+          })
+        .selector('.highlighted')
+          .css({
+            'background-color': '#4CAF50',
+            'line-color': '#4CAF50',
+            'target-arrow-color': '#4CAF50',
+            'transition-property': 'background-color, line-color, target-arrow-color',
+            'transition-duration': '0.5s'
+          }),
+
+      elements: cy_data,
+
+      layout: {
+        name: 'circle',
+        directed: true,
+        roots: '#a',
+        padding: 10
+      }
+    });
+
+    var elems = cy.elements();
+
+    var movements = cy_data['movements'];
+
+    for (var i = movements.length - 1; i >= 0; i--) {
+        console.log(movements[i], i);
+    }
+    for (var i = 0; i < elems.length; i++) {
+        console.log(elems[i]._private.data, i);
+    }
+
+    var getEdgeId = function(source, dest, via){
+        var ids = []
+        for (var i = 0; i < elems.length; i++) {
+            if (elems[i].isEdge()) {
+                if (elems[i]._private.data.target == dest && elems[i]._private.data.label == via && elems[i]._private.data.source == source) {
+                    console.log("AJA", i)
+                    return i
+                }
+            }
+        }
+    };
+
+    var getStateId = function(state){
+        for (var i = 0; i < elems.length; i++) {
+            if (elems[i].isNode()) {
+                if (elems[i]._private.data.id == state) {
+                    return i;
+                }
+            }
+        }
+    };
+
+    var actualEdgeId = 0;
+    var actualStateId = 0;
+    var i = 0;
+
+    var highlightNextEle = function(){
+        if( i < movements.length ){
+            console.log("Hello", i);
+            //First time
+            if (i === 0) {
+                console.log(movements[i]);
+                console.log(actualStateId, actualEdgeId);
+                actualStateId = getStateId(movements[i].state);
+                elems[actualStateId].addClass('highlighted');
+            }
+
+            //Second time times
+            if (i == 1) {
+                console.log(movements[i]);
+                console.log(actualStateId, actualEdgeId);
+                elems[actualStateId].removeClass('highlighted');
+                actualStateId = getStateId(movements[i].state);
+                actualEdgeId = getEdgeId(movements[i-1].state, movements[i].state, movements[i].via);
+                elems[actualStateId].addClass('highlighted');
+                elems[actualEdgeId].addClass('highlighted');
+            }
+
+            //Next ones
+            if (i > 1) {
+                console.log(movements[i]);
+                console.log(actualStateId, actualEdgeId);
+                elems[actualStateId].removeClass('highlighted');
+                elems[actualEdgeId].removeClass('highlighted');
+                actualStateId = getStateId(movements[i].state);
+                actualEdgeId = getEdgeId(movements[i-1].state, movements[i].state, movements[i].via);
+                elems[actualStateId].addClass('highlighted');
+                elems[actualEdgeId].addClass('highlighted');
+            }
+
+            i++;
+            setTimeout(highlightNextEle, 1000);
+        }
+    };
+    // kick off first highlight
+    highlightNextEle();
+    cy.layout({ name: 'circle' });
+}
+</script>
