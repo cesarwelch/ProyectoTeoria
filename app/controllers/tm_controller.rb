@@ -9,13 +9,13 @@ class TmController < ApplicationController
         hash = JSON.parse(hash) if hash.is_a?(String)
 
         @tm = TmHelper::TM.new
-        @tm.states = hash['states'].split(',')
+        @tm.states = hash['states']
         @tm.states.push('ACCEPT')
         @tm.states.push('REJECT')
         @tm.start = hash['start']
         @tm.inputAlphabet = hash['inputAlphabet']
         @tm.tapeAlphabet = hash['tapeAlphabet']
-        @tm.transitions = JSON.parse(hash['transitions'])
+        @tm.transitions = hash['transitions']
         trans_map = Hash.new
         @tm.transitions.each do |t|
           if trans_map[t['current_state']] == nil
@@ -63,27 +63,51 @@ class TmController < ApplicationController
         end
       end
 
-      @bringElements = {
-          nodes: nodes,
-          edges: edges
-        }.to_json.html_safe
+      response = {
+        nodes: nodes,
+        edges: edges
+      }.to_json
+      render :json => response
 
     end
 
     def consume
-        hash = tm_params
+        hash = TmHelper::FSM.convert_from_fsm(params['data'])
         hash = JSON.parse(hash) if hash.is_a?(String)
 
         @tm = TmHelper::TM.new
-        @tm.states = hash['states'].split(' ')
+        @tm.states = hash['states']
         @tm.start = hash['start']
-        @tm.transitions = {"A"=>{"0"=>{"to"=>"A", "write"=>0, "move"=>"R"}, "1"=>{"to"=>"B", "write"=>1, "move"=>"R"}}, "B"=>{"1"=>{"to"=>"B", "write"=>1, "move"=>"R"}, "0"=>{"to"=>"C", "write"=>0, "move"=>"R"}}, "C"=>{"1"=>{"to"=>"ACCEPT", "write"=>1, "move"=>"R"}, "0"=>{"to"=>"A", "write"=>0, "move"=>"R"}}}
-        @tm.inputAlphabet = hash['inputAlphabet'].split(' ')
-        @tm.tapeAlphabet = hash['tapeAlphabet'].split(' ')
+        #@tm.transitions = {"A"=>{"0"=>{"to"=>"A", "write"=>0, "move"=>"R"}, "1"=>{"to"=>"B", "write"=>1, "move"=>"R"}}, "B"=>{"1"=>{"to"=>"B", "write"=>1, "move"=>"R"}, "0"=>{"to"=>"C", "write"=>0, "move"=>"R"}}, "C"=>{"1"=>{"to"=>"ACCEPT", "write"=>1, "move"=>"R"}, "0"=>{"to"=>"A", "write"=>0, "move"=>"R"}}}
+        @tm.transitions = hash['transitions']
+        trans_map = Hash.new
+        @tm.transitions.each do |t|
+          if trans_map[t['current_state']] == nil
+            trans_map[t['current_state']] = {
+              t['symbol'] => {
+                "to" => t['destination'],
+                "write" => t['write'],
+                "move" => t['move']
+              }
+            }
+          else
+            trans_map[t['current_state']] = trans_map[t['current_state']].merge({
+              t['symbol'] => {
+                "to" => t['destination'],
+                "write" => t['write'],
+                "move" => t['move']
+              }
+            })
+          end
+        end
 
-        @compute = @tm.feed(hash['input_string'])
+        @tm.transitions = trans_map
+        @tm.inputAlphabet = hash['inputAlphabet']
+        @tm.tapeAlphabet = hash['tapeAlphabet']
 
-         nodes = []
+        @compute = @tm.feed(params['string'])
+
+        nodes = []
         edges = []
 
         @tm.states.each do |s|
@@ -108,10 +132,13 @@ class TmController < ApplicationController
           end
         end
 
-      @bringElements = {
-        nodes: nodes,
-        edges: edges
-      }.to_json.html_safe
+      response = {
+          nodes: nodes,
+          edges: edges,
+          movements: @compute[:movements],
+          accept: @compute[:accept]
+        }.to_json
+        render :json => response
 
     end
 

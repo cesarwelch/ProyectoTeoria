@@ -21,25 +21,41 @@ module TmHelper
 					from = element['nodes'][link['nodeA']]['text']
 					to = element['nodes'][link['nodeB']]['text']
 					with = link['text'].split(',')[0]
-					write = link['text'].split(',')[1].split('->')[1]
-					move = link['text'].split(',')[1].split('->')[0]
+					if link['text'].split(',')[1].split('->')[1] != '&'
+						push = link['text'].split(',')[1].split('->')[1]
+					else
+						push = nil
+					end
+					if link['text'].split(',')[1].split('->')[0] != '&'
+						pop = link['text'].split(',')[1].split('->')[0]
+					else
+						pop = nil
+					end
 				elsif link['type'] == 'SelfLink'
 					from = element['nodes'][link['node']]['text']
 					to = element['nodes'][link['node']]['text']
 					with = link['text'].split(',')[0]
-					write = link['text'].split(',')[1].split('->')[1]
-					move = link['text'].split(',')[1].split('->')[0]
+					if link['text'].split(',')[1].split('->')[1] != '&'
+						push = link['text'].split(',')[1].split('->')[1]
+					else
+						push = nil
+					end
+					if link['text'].split(',')[1].split('->')[0] != '&'
+						pop = link['text'].split(',')[1].split('->')[0]
+					else
+						pop = nil
+					end
 				end
 				if link['type'] != 'StartLink'
-					if with != '&'
+					if with != '&' and with != 'ACCEPT'
 						alphabet.add(with)
 					end
-					transitions.write({
+					transitions.push({
 						"current_state": from,
 						"symbol": with,
 						"destination": to,
-						"write": write,
-						"move": move
+						"write": push,
+						"move": pop
 					})
 				end
 				if link['type'] == 'StartLink'
@@ -76,10 +92,10 @@ module TmHelper
 			@reject = false
 			movements = []
 			stateHead = @start.to_s
-			movements.write({state: stateHead, via: "-"})
+			movements.push({state: stateHead, via: "-"})
 			input.each_char do |symbol|
 				toState = transition(stateHead, symbol)
-				movements.write({state: toState, via: symbol})
+				movements.push({state: toState, via: symbol})
 				if @accept || @reject
 					break
 				else
@@ -110,6 +126,7 @@ module TmHelper
 		end
 
 		def transition(state, symbol)
+			pp state, symbol, @transitions
 			actions = @transitions[state][symbol]
 			@tape.transition(symbol, actions['write'], actions['move'])
 
