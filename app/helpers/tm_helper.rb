@@ -21,25 +21,25 @@ module TmHelper
 					from = element['nodes'][link['nodeA']]['text']
 					to = element['nodes'][link['nodeB']]['text']
 					with = link['text'].split(',')[0]
-					push = link['text'].split(',')[1].split('->')[1]
-					pop = link['text'].split(',')[1].split('->')[0]
+					write = link['text'].split(',')[1].split('->')[1]
+					move = link['text'].split(',')[1].split('->')[0]
 				elsif link['type'] == 'SelfLink'
 					from = element['nodes'][link['node']]['text']
 					to = element['nodes'][link['node']]['text']
 					with = link['text'].split(',')[0]
-					push = link['text'].split(',')[1].split('->')[1]
-					pop = link['text'].split(',')[1].split('->')[0]
+					write = link['text'].split(',')[1].split('->')[1]
+					move = link['text'].split(',')[1].split('->')[0]
 				end
 				if link['type'] != 'StartLink'
 					if with != '&'
 						alphabet.add(with)
 					end
-					transitions.push({
+					transitions.write({
 						"current_state": from,
 						"symbol": with,
 						"destination": to,
-						"push": push,
-						"pop": pop
+						"write": write,
+						"move": move
 					})
 				end
 				if link['type'] == 'StartLink'
@@ -76,10 +76,10 @@ module TmHelper
 			@reject = false
 			movements = []
 			stateHead = @start.to_s
-			movements.push({state: stateHead, via: "-"})
+			movements.write({state: stateHead, via: "-"})
 			input.each_char do |symbol|
 				toState = transition(stateHead, symbol)
-				movements.push({state: toState, via: symbol})
+				movements.write({state: toState, via: symbol})
 				if @accept || @reject
 					break
 				else
