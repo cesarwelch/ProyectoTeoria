@@ -21,14 +21,30 @@ module PdaHelper
 					from = element['nodes'][link['nodeA']]['text']
 					to = element['nodes'][link['nodeB']]['text']
 					with = link['text'].split(',')[0]
-					push = link['text'].split(',')[1].split('->')[0]
-					pop = link['text'].split(',')[1].split('->')[1]
+					if link['text'].split(',')[1].split('->')[1] != '&'
+						push = link['text'].split(',')[1].split('->')[1]
+					else
+						push = nil
+					end
+					if link['text'].split(',')[1].split('->')[0] != '&'
+						pop = link['text'].split(',')[1].split('->')[0]
+					else
+						pop = nil
+					end
 				elsif link['type'] == 'SelfLink'
 					from = element['nodes'][link['node']]['text']
 					to = element['nodes'][link['node']]['text']
 					with = link['text'].split(',')[0]
-					push = link['text'].split(',')[1].split('->')[0]
-					pop = link['text'].split(',')[1].split('->')[1]
+					if link['text'].split(',')[1].split('->')[1] != '&'
+						push = link['text'].split(',')[1].split('->')[1]
+					else
+						push = nil
+					end
+					if link['text'].split(',')[1].split('->')[0] != '&'
+						pop = link['text'].split(',')[1].split('->')[0]
+					else
+						pop = nil
+					end
 				end
 				if link['type'] != 'StartLink'
 					if with != '&'
@@ -82,7 +98,7 @@ module PdaHelper
 					able = false unless stackTop == actions['pop']
 					@stack.pop if able
 				end
-				
+
 				if able
 					dests << actions['to']
 
@@ -155,17 +171,15 @@ module PdaHelper
 				newHeads = []
 				heads.each do |head|
 					if has_transition?(head, symbol)
-						transition(head, symbol).each { |t| newHeads << t 
-							
+						transition(head, symbol).each { |t| newHeads << t
 						}
-						
 					end
 				end
-				newHeads.each do |pejui|
-					movements.push({state: pejui, via: symbol})
+				newHeads.each do |state|
+					movements.push({state: state, via: symbol})
 				end
 				heads = newHeads
-				
+
 				break if heads.empty?
 			end
 			accept = includes_accept_state? heads
