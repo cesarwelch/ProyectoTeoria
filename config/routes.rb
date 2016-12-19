@@ -19,4 +19,6 @@ Rails.application.routes.draw do
   get '/tm', to: 'tm#index', as: :tm
   post '/tm/compute', to: 'tm#compute', as: :tm_compute
   post '/tm/consume', to: 'tm#consume', as: :tm_consume
+
+  get '/cfg', to: 'cfg#index', as: :cfg
 end
