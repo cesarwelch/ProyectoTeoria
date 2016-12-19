@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   root 'automata_test#index'
-
-
+  
   post '/test/receive', to: 'dfa#test', as: :test
 
   get '/nfa', to: 'nfa#index', as: :nfa
