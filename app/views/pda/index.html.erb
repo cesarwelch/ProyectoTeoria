@@ -56,7 +56,7 @@ function send_data() {
 		url: '/pda/compute',
 		data: {"data": localStorage['fsm']},
 		success: function(data){
-		
+
 			cy_data = data
       $("#instructions").fadeOut()
       $("#con_nfa_btn").fadeOut()
@@ -70,7 +70,7 @@ function send_data() {
 		},
 		error: function(err){
 			console.log(err)
-			alert('Favor coroborar que el DFA este correctamente ingresado');
+			alert('Favor coroborar que el PDA este correctamente ingresado');
 		}
 	});
 }
