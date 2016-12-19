@@ -15,8 +15,8 @@
     <div class=" z-depth-5 white white">
       <div class="cy" id="cy" style="display: none;"></div>
     </div>
-    <div id=
-    "accept" style="display: none;">
+
+    <div id="accept" style="display: none;">
       <center><h4>Accepts</h4></center>
     </div>
 
@@ -42,7 +42,33 @@
   </div>
 </div>
 
+
 <script type="text/javascript">
   var cy_data = null
-  
+
+  function send_data() {
+  	$.ajax({
+  		type: "POST",
+  		url: '/tm/compute',
+  		data: {"data": localStorage['fsm']},
+  		success: function(data){
+
+  			cy_data = data
+        $("#instructions").fadeOut()
+        $("#con_nfa_btn").fadeOut()
+        $("#con_regex_btn").fadeOut()
+  			$("#canvas").fadeOut()
+  			$("#send_btn").fadeOut()
+  			render_cy()
+  			$("#cy").fadeIn()
+  			$("#input").fadeIn()
+
+  		},
+  		error: function(err){
+  			console.log(err)
+  			alert('Favor coroborar que la TM este correctamente ingresado');
+  		}
+  	});
+  }
+
 </script>
