@@ -1,6 +1,6 @@
 class TmController < ApplicationController
 
-  def index
+    def index
           @tm = TmHelper::TM.new
     end
 
@@ -35,42 +35,42 @@ class TmController < ApplicationController
               }
             })
           end
-        end
+      end
 
-        @tm.transitions = trans_map
+      @tm.transitions = trans_map
 
-        nodes = []
-        edges = []
+      nodes = []
+      edges = []
 
-        @tm.states.each do |s|
-            n = { data: { id: s }}
-            nodes.push(n)
-        end
+      @tm.states.each do |s|
+          n = { data: { id: s }}
+          nodes.push(n)
+      end
 
-        i = 1
-        @tm.transitions.each do |keyt, valt|
-          valt.each do |key, val|
-            e = { data: {
-                  id: i.to_s,
-                  source: keyt,
-                  move: val['move'],
-                  target: val['to'],
-                  label: "#{key} -> #{val['write'] ? val['write'] : '&'}, #{val['move']}"
-                }
+      i = 1
+      @tm.transitions.each do |keyt, valt|
+        valt.each do |key, val|
+          e = { data: {
+            id: i.to_s,
+            source: keyt,
+            move: val['move'],
+            target: val['to'],
+            label: "#{key} -> #{val['write'] ? val['write'] : '&'}, #{val['move']}"
               }
-            edges.push(e)
-            i = i+1
-          end
+          }
+          edges.push(e)
+          i = i+1
         end
+      end
 
-        @bringElements = {
+      @bringElements = {
           nodes: nodes,
           edges: edges
         }.to_json.html_safe
 
-      end
+    end
 
-      def consume
+    def consume
         hash = tm_params
         hash = JSON.parse(hash) if hash.is_a?(String)
 
@@ -83,7 +83,7 @@ class TmController < ApplicationController
 
         @compute = @tm.feed(hash['input_string'])
 
-        nodes = []
+         nodes = []
         edges = []
 
         @tm.states.each do |s|
@@ -108,14 +108,16 @@ class TmController < ApplicationController
           end
         end
 
-        @bringElements = {
-          nodes: nodes,
-          edges: edges
-        }.to_json.html_safe
+      @bringElements = {
+        nodes: nodes,
+        edges: edges
+      }.to_json.html_safe
+
     end
 
     private
       def tm_params
-        params.permit(:states, :alphabet, :start, :transitions, :input_string, :inputAlphabet, :tapeAlphabet)
-      end
+      params.permit(:states, :alphabet, :start, :transitions, :input_string, :inputAlphabet, :tapeAlphabet)
+    end
+
 end

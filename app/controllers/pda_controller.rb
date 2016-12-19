@@ -113,7 +113,6 @@ class PdaController < ApplicationController
             end
           end
         end
-        trans_map['&']={"to"=>@pda.start, "pop"=>"@"}
         @pda.transitions = trans_map
         pp @pda.transitions
         @compute = @pda.consume(params['string'])
