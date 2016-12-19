@@ -38,8 +38,8 @@ module PdaHelper
 						"current_state": from,
 						"symbol": with,
 						"destination": to,
-						"push": "push",
-						"pop": "pop"
+						"push": push,
+						"pop": pop
 					})
 				end
 				if link['type'] == 'StartLink'

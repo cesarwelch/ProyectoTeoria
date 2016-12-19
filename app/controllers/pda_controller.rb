@@ -7,15 +7,15 @@ class PdaController < ApplicationController
   end
 
   def compute
-      hash = DfaHelper::FSM.convert_from_fsm(params['data'])
+      hash = PdaHelper::FSM.convert_from_fsm(params['data'])
       hash = JSON.parse(hash) if hash.is_a?(String)
       @pda = PdaHelper::PDA.new
-      @pda.states = hash['states'].split(',') # ["S", "A", "B", "ha"]
-      @pda.alphabet = hash['alphabet'].split(/\s*,\s*/) # ["(", ")", "&"]
+      @pda.states = hash['states'] # ["S", "A", "B", "ha"]
+      @pda.alphabet = hash['alphabet'] # ["(", ")", "&"]
       @pda.start = hash['start'] # "S"
-      @pda.accept = hash['accept'].split(/\s*,\s*/) # "ha"
-      @pda.stack_user = hash['stack_user'].split(/\s*,\s*/)
-      @pda.transitions = JSON.parse(hash['transitions'])
+      @pda.accept = hash['accept'] # "ha"
+      @pda.stack_user = hash['stack_user']
+      @pda.transitions =hash['transitions']
       trans_map = Hash.new
       @pda.transitions.each do |t|
         if trans_map[t['current_state']] == nil && t['push'] != '-' && t['push'] != nil && t['pop'] != '-' && t['pop'] != nil
@@ -48,7 +48,7 @@ class PdaController < ApplicationController
 
       nodes = []
       edges = []
-
+      pp hash['states']
       @pda.states.each do |s|
           n = { data: { id: s }}
           nodes.push(n)
