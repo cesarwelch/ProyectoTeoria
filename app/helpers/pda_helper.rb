@@ -21,14 +21,14 @@ module PdaHelper
 					from = element['nodes'][link['nodeA']]['text']
 					to = element['nodes'][link['nodeB']]['text']
 					with = link['text'].split(',')[0]
-					push = link['text'].split(',')[1].split('->')[1]
-					pop = link['text'].split(',')[1].split('->')[0]
+					push = link['text'].split(',')[1].split('->')[0]
+					pop = link['text'].split(',')[1].split('->')[1]
 				elsif link['type'] == 'SelfLink'
 					from = element['nodes'][link['node']]['text']
 					to = element['nodes'][link['node']]['text']
 					with = link['text'].split(',')[0]
-					push = link['text'].split(',')[1].split('->')[1]
-					pop = link['text'].split(',')[1].split('->')[0]
+					push = link['text'].split(',')[1].split('->')[0]
+					pop = link['text'].split(',')[1].split('->')[1]
 				end
 				if link['type'] != 'StartLink'
 					if with != '&'
@@ -58,7 +58,6 @@ module PdaHelper
 
 	class PDA < NfaHelper::NFA
 		attr_accessor :stack_user
-
 		def initialize(params={})
 			super(params)
 			@alphabet << '&' unless !@alphabet || @alphabet.include?('&')
@@ -72,45 +71,46 @@ module PdaHelper
 		end
 
 		def transition(state, symbol, stackTop=nil)
-				dests = []
+			dests = []
 
-				if has_transition?(state, symbol)
-					actions = @transitions[state][symbol]
-					stackTop ||= @stack.last
-					able = true
-					@stack.push actions['push'] if actions['push']
-					if actions['pop']
-						able = false unless stackTop == actions['pop']
-						@stack.pop if able
-					end
-
-					if able
-						dests << actions['to']
-
-						if has_transition?(actions['to'], '&')
-							actions = @transitions[actions['to']]['&']
-							able = true
-							@stack.push actions['push'] if actions['push']
-							if actions['pop']
-								able = false unless @stack.last == actions['pop']
-								@stack.pop if able
-							end
-							if able
-								dests << actions['to']
-							end
-						end
-						dests
-					else
-						return dests
-					end
-				else
-					return []
+			if has_transition?(state, symbol)
+				actions = @transitions[state][symbol]
+				stackTop ||= @stack.last
+				able = true
+				@stack.push actions['push'] if actions['push']
+				if actions['pop']
+					able = false unless stackTop == actions['pop']
+					@stack.pop if able
 				end
+				
+				if able
+					dests << actions['to']
+
+					if has_transition?(actions['to'], '&')
+						actions = @transitions[actions['to']]['&']
+						able = true
+						@stack.push actions['push'] if actions['push']
+						if actions['pop']
+							able = false unless @stack.last == actions['pop']
+							@stack.pop if able
+						end
+						if able
+							dests << actions['to']
+						end
+					end
+					dests
+				else
+					return dests
+				end
+			else
+				return []
 			end
+		end
 
 		def pop?(symbol)
 			@stack.last == symbol
 		end
+
 
 		def has_transition?(state, symbol)
 			return false unless @transitions.has_key? state
@@ -123,6 +123,7 @@ module PdaHelper
 			end
 		end
 
+
 		def accept_state?(state)
 			@accept.include? state
 		end
@@ -131,6 +132,7 @@ module PdaHelper
 			states.each { |s| return true if accept_state? s }
 			return false
 		end
+
 
 		def consume(input)
 			movements = []
@@ -153,15 +155,17 @@ module PdaHelper
 				newHeads = []
 				heads.each do |head|
 					if has_transition?(head, symbol)
-						transition(head, symbol).each { |t| newHeads << t
+						transition(head, symbol).each { |t| newHeads << t 
+							
 						}
+						
 					end
 				end
-				newHeads.each do |kstate|
-					movements.push({state: kstate, via: symbol})
+				newHeads.each do |pejui|
+					movements.push({state: pejui, via: symbol})
 				end
 				heads = newHeads
-
+				
 				break if heads.empty?
 			end
 			accept = includes_accept_state? heads
@@ -171,11 +175,11 @@ module PdaHelper
 				heads: heads,
 				stack: @stack,
 				movements: movements,
-						states: @states,
-						alphabet: @alphabet,
-						start: @start,
-						accept_state: @accept,
-						transitions: @transitions
+                states: @states,
+                alphabet: @alphabet,
+                start: @start,
+                accept_state: @accept,
+                transitions: @transitions
 			}
 		end
 	end
